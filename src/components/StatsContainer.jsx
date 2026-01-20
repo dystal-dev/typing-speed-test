@@ -4,7 +4,7 @@ import SettingsContainer from "./SettingsContainer";
 
 export default function StatsContainer() {
   return (
-    <div className="pb-4 border-b-1 flex justify-between items-center">
+    <div className="pb-200 border-b-1 flex justify-between items-center">
       <StatsRow />
       <SettingsContainer />
     </div>

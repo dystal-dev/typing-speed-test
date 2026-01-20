@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="grid font-sora mx-28 my-8 gap-16">
+    <div className="grid font-sora mx-1400 my-400 gap-800">
       <Header />
       <MainContent />
       <Footer />
