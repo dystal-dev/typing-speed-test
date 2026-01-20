@@ -8,7 +8,17 @@
 @theme {
   --font-sora: "Sora", sans-serif;
 
-  --spacing-0: 0;
+  --color-neutral-900: rgb(18, 18, 18);
+  --color-neutral-800: rgb(38, 38, 38);
+  --color-neutral-500: rgb(113, 113, 120);
+  --color-neutral-400: rgb(148, 148, 151);
+  --color-neutral-0: rgb(255, 255, 255);
+  --color-blue-600: rgb(23, 125, 255);
+  --color-blue-400: rgb(76, 166, 255);
+  --color-red-500: rgb(214, 77, 91);
+  --color-green-500: rgb(77, 214, 123);
+  --color-yellow-400: rgb(244, 220, 115);
+
   --spacing-25: 2px;
   --spacing-50: 4px;
   --spacing-75: 6px;
@@ -27,6 +37,17 @@
   --spacing-1400: 112px;
   --spacing-1600: 128px;
   --spacing-1800: 140px;
+
+  --radius-0: 0;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
 }
 
 @layer base {

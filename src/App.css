@@ -1,4 +1,4 @@
 :root {
-  background-color: hsl(0, 0%, 7%);
-  color: white;
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-0);
 }
