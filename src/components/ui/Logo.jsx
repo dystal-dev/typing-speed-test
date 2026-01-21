@@ -1,5 +1,5 @@
 import React from "react";
-import LogoLarge from "../assets/images/logo-large.svg";
+import LogoLarge from "../../assets/images/logo-large.svg";
 
 export default function Logo() {
   return (
