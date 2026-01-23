@@ -1,36 +1,11 @@
 import React from "react";
-import { useState } from "react";
 import getRandomPassage from "../utils/passages.js";
+import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";
 
 export default function TextBox() {
-  const [userInput, setUserInput] = useState("");
   const passage = getRandomPassage("hard").text;
-
-  const [passageCharArray, setPassageCharArray] = useState(
-    passage.split("").map((char, index) => ({
-      char,
-      index,
-      isCorrect: null,
-    })),
-  );
-
-  function handleUserInputChange(event) {
-    const newInputvalue = event.target.value;
-
-    setUserInput(newInputvalue);
-    checkTypingAccuracy(newInputvalue);
-  }
-
-  function checkTypingAccuracy(inputValue) {
-    const inputArray = inputValue.split("");
-
-    const updatedArray = passageCharArray.map((item, i) => ({
-      ...item,
-      isCorrect: i < inputArray.length ? inputArray[i] === item.char : null,
-    }));
-
-    setPassageCharArray(updatedArray);
-  }
+  const { userInput, passageCharArray, handleUserInputChange } =
+    useTypingSpeedTest(passage);
 
   return (
     <div className="relative">
