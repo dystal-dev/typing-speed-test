@@ -6,6 +6,8 @@
 @import "tailwindcss";
 
 @theme {
+  --app-max-width: 1440px;
+
   --font-sora: "Sora", sans-serif;
 
   --color-neutral-900: rgb(18, 18, 18);
