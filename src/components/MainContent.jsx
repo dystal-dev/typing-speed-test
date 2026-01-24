@@ -1,12 +1,16 @@
 import React from "react";
-import StatsContainer from "./StatsContainer";
-import TextContainer from "./TextContainer";
+import StatsRow from "./StatsRow";
+import SettingsRow from "./SettingsRow";
+import TextBox from "./TextBox";
 
 export default function MainContent() {
   return (
     <div className="grid gap-8">
-      <StatsContainer />
-      <TextContainer />
+      <div className="pb-200 border-b-1 border-neutral-700 xl:flex justify-between items-center">
+        <StatsRow />
+        <SettingsRow />
+      </div>
+      <TextBox />
     </div>
   );
 }
