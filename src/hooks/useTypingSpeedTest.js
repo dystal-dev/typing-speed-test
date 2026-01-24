@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function useTypingTest(passage) {
+export function useTypingSpeedTest(passage) {
   const [userInput, setUserInput] = useState("");
   const [passageCharArray, setPassageCharArray] = useState(
     passage.split("").map((char, index) => ({
