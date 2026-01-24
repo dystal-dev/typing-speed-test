@@ -1,4 +1,4 @@
-import data from "../data/data.json" with { type: "json" };
+import data from "../data/passages.json" with { type: "json" };
 
 export default function getRandomPassage(difficulty) {
   const generateRandomNumber = (arg) => {
