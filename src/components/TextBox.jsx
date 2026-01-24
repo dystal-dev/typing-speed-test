@@ -11,21 +11,20 @@ export default function TextBox() {
     (c) => c.isCorrect === null,
   );
 
+  function getCharClass(character, currentIndex) {
+    if (character.index === currentIndex) return "bg-neutral-0/25 rounded-4";
+    if (character.isCorrect === null) return "text-gray-400";
+    if (character.isCorrect) return "text-green-500";
+    return "text-red-500 underline";
+  }
+
   return (
     <div className="relative">
       <div className="w-full text-preset-1-regular text-neutral-400 whitespace-pre-wrap">
         {passageCharArray.map((character) => (
           <span
             key={character.index}
-            className={
-              character.index === firstNullIndex
-                ? "bg-neutral-0/25 rounded-4" // current character
-                : character.isCorrect === null
-                  ? "text-gray-400" // bg-neutral-0/25 rounded-4
-                  : character.isCorrect
-                    ? "text-green-500"
-                    : "text-red-500 underline"
-            }
+            className={getCharClass(character, firstNullIndex)}
           >
             {character.char}
           </span>
