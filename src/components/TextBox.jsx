@@ -7,18 +7,24 @@ export default function TextBox() {
   const { userInput, passageCharArray, handleUserInputChange } =
     useTypingSpeedTest(passage);
 
+  const firstNullIndex = passageCharArray.findIndex(
+    (c) => c.isCorrect === null,
+  );
+
   return (
     <div className="relative">
-      <div className="w-full text-preset-1-regular text-neutral-400">
+      <div className="w-full text-preset-1-regular text-neutral-400 whitespace-pre-wrap">
         {passageCharArray.map((character) => (
           <span
             key={character.index}
             className={
-              character.isCorrect === null
-                ? "text-gray-400" // bg-neutral-0/25 rounded-4
-                : character.isCorrect
-                  ? "text-green-500"
-                  : "text-red-500 underline"
+              character.index === firstNullIndex
+                ? "bg-neutral-0/25 rounded-4" // current character
+                : character.isCorrect === null
+                  ? "text-gray-400" // bg-neutral-0/25 rounded-4
+                  : character.isCorrect
+                    ? "text-green-500"
+                    : "text-red-500 underline"
             }
           >
             {character.char}
