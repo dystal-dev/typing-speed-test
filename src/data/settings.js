@@ -1,4 +1,4 @@
 export const settingsList = [
-  { setting: "Difficulty", options: ["Easy", "Medium", "Hard"] },
-  { setting: "Mode", options: ["Timed (60s)", "Passage"] },
+  { label: "Difficulty", options: ["Easy", "Medium", "Hard"], isActive: false },
+  { label: "Mode", options: ["Timed (60s)", "Passage"], isActive: false },
 ];

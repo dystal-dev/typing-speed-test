@@ -10,7 +10,7 @@ export default function StatsRow() {
   });
 
   return (
-    <div className="flex gap-300 divide-x divide-neutral-700">
+    <div className="flex divide-x divide-neutral-700">
       {statList.map((stat) => (
         <Stat
           key={stat.label}
