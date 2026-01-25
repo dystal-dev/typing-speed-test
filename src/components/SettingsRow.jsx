@@ -8,9 +8,9 @@ export default function SettingsRow() {
         {settingsList.map((setting) => (
           <ul
             key={setting.label}
-            className="text-preset-5 text-neutral-400 gap-150 flex items-center px-300 last:pr-0 first:pl-0"
+            className="text-preset-5 text-neutral-400 gap-75 flex items-center px-200 last:pr-0 first:pl-0"
           >
-            {setting.label}:
+            <span className="pr-75">{setting.label}:</span>
             {setting.options.map((option) => (
               <li key={option}>
                 <button className="btn cursor-pointer text-preset-5 text-neutral-0 px-125 py-75 rounded-8 border-1 border-neutral-500">
