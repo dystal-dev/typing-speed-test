@@ -1,5 +1,10 @@
 import React from "react";
+import Button from "./ui/Button.jsx";
 
 export default function Footer() {
-  return <button className="w-fit">Restart Test</button>;
+  return (
+    <div className="mx-auto">
+      <Button variant="secondary-muted">Restart Test</Button>
+    </div>
+  );
 }

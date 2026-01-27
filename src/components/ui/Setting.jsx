@@ -1,3 +1,5 @@
+import Button from "./Button.jsx";
+
 export default function Settings({ label, options, isActive }) {
   return (
     <ul
@@ -7,9 +9,10 @@ export default function Settings({ label, options, isActive }) {
       <span className="pr-75">{label}:</span>
       {options.map((option) => (
         <li key={option}>
-          <button className="btn cursor-pointer text-preset-5 text-neutral-0 px-125 py-75 rounded-8 border-1 border-neutral-500">
+          {/* <button className="btn cursor-pointer text-preset-5 text-neutral-0 px-125 py-75 rounded-8 border-1 border-neutral-500">
             {option}
-          </button>
+          </button> */}
+          <Button variant="settings">{option}</Button>
         </li>
       ))}
     </ul>
