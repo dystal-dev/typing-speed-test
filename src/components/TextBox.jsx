@@ -19,7 +19,7 @@ export default function TextBox() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative blur-lg">
       <div className="w-full text-preset-1-regular text-neutral-400 whitespace-pre-wrap">
         {passageCharArray.map((character) => (
           <span
