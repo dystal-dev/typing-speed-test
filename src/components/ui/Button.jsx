@@ -1,6 +1,6 @@
 const buttonVariants = {
   primary:
-    "text-preset-3-semiBold text-neutral-0 px-300 py-200 rounded-12 bg-blue-600",
+    "text-preset-3-semiBold text-neutral-0 px-300 py-200 rounded-12 bg-blue-600 h-fit w-fit hover:bg-blue-400",
   secondary:
     "text-preset-3-semiBold text-neutral-0 px-200 py-125 rounded-12 bg-neutral-800 gap-125",
   "secondary-muted":
