@@ -1,11 +1,17 @@
 import React from "react";
 import getRandomPassage from "../utils/passages.js";
 import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";
+import Button from "./ui/Button.jsx";
 
 export default function TextBox() {
   const passage = getRandomPassage("hard").text;
-  const { userInput, passageCharArray, handleUserInputChange } =
-    useTypingSpeedTest(passage);
+  const {
+    testStarted,
+    setTestStarted,
+    userInput,
+    passageCharArray,
+    handleUserInputChange,
+  } = useTypingSpeedTest(passage);
 
   const firstNullIndex = passageCharArray.findIndex(
     (c) => c.isCorrect === null,
@@ -19,7 +25,22 @@ export default function TextBox() {
   }
 
   return (
-    <div className="relative blur-lg">
+    <div className="relative">
+      {!testStarted && (
+        <div className="absolute -inset-8 z-10 flex pointer-events-none backdrop-blur-sm">
+          <div className="flex flex-col m-auto h-auto gap-250 items-center pointer-events-auto">
+            <Button
+              variant="primary"
+              onClick={() => setTestStarted(!testStarted)}
+            >
+              Start Typing Test
+            </Button>
+            <span class="text-preset-3-semiBold">
+              Or click the text and start typing
+            </span>
+          </div>
+        </div>
+      )}
       <div className="w-full text-preset-1-regular text-neutral-400 whitespace-pre-wrap">
         {passageCharArray.map((character) => (
           <span
@@ -31,7 +52,8 @@ export default function TextBox() {
         ))}
       </div>
       <textarea
-        className="resize-none bg-neutral-600 absolute inset-0 cursor-default resize-none opacity-0"
+        autoFocus
+        className="bg-neutral-600 resize-none absolute inset-0 cursor-default opacity-0"
         spellCheck="false"
         autoComplete="off"
         autoCorrect="off"

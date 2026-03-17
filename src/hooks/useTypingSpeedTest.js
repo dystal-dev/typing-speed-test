@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export function useTypingSpeedTest(passage) {
+  const [testStarted, setTestStarted] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [passageCharArray, setPassageCharArray] = useState(
     passage.split("").map((char, index) => ({
@@ -15,6 +16,10 @@ export function useTypingSpeedTest(passage) {
 
     setUserInput(newInputvalue);
     checkTypingAccuracy(newInputvalue);
+
+    if (!testStarted) {
+      setTestStarted(true);
+    }
   }
 
   function checkTypingAccuracy(inputValue) {
@@ -27,5 +32,11 @@ export function useTypingSpeedTest(passage) {
     setPassageCharArray(updatedArray);
   }
 
-  return { userInput, passageCharArray, handleUserInputChange };
+  return {
+    testStarted,
+    setTestStarted,
+    userInput,
+    passageCharArray,
+    handleUserInputChange,
+  };
 }
