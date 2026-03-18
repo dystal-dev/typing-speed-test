@@ -10,7 +10,6 @@ export default function SettingsRow() {
             key={setting.label}
             label={setting.label}
             options={setting.options}
-            isActive={setting.isActive}
           />
         ))}
       </div>

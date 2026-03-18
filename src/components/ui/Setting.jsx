@@ -1,6 +1,9 @@
 import Button from "./Button.jsx";
+import { useState } from "react";
 
-export default function Settings({ label, options, isActive }) {
+export default function Settings({ label, options }) {
+  const [active, setActive] = useState(options[0] || "");
+
   return (
     <ul
       key={label}
@@ -9,10 +12,15 @@ export default function Settings({ label, options, isActive }) {
       <span className="pr-75">{label}:</span>
       {options.map((option) => (
         <li key={option}>
-          {/* <button className="btn cursor-pointer text-preset-5 text-neutral-0 px-125 py-75 rounded-8 border-1 border-neutral-500">
+          <Button
+            variant="settings"
+            className={
+              active === option ? "!text-blue-400 !border-blue-400" : ""
+            }
+            onClick={() => setActive(option)}
+          >
             {option}
-          </button> */}
-          <Button variant="settings">{option}</Button>
+          </Button>
         </li>
       ))}
     </ul>

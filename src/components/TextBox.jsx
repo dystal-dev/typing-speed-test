@@ -29,10 +29,7 @@ export default function TextBox() {
       {!testStarted && (
         <div className="absolute -inset-8 z-10 flex pointer-events-none backdrop-blur-sm">
           <div className="flex flex-col m-auto h-auto gap-250 items-center pointer-events-auto">
-            <Button
-              variant="primary"
-              onClick={() => setTestStarted(!testStarted)}
-            >
+            <Button variant="primary" onClick={() => setTestStarted(true)}>
               Start Typing Test
             </Button>
             <span class="text-preset-3-semiBold">
