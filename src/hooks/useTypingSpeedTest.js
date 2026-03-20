@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function useTypingSpeedTest(passage) {
   const [testStarted, setTestStarted] = useState(false);
@@ -10,6 +10,18 @@ export function useTypingSpeedTest(passage) {
       isCorrect: null,
     })),
   );
+
+  useEffect(() => {
+    setUserInput("");
+    setPassageCharArray(
+      passage.split("").map((char, index) => ({
+        char,
+        index,
+        isCorrect: null,
+      })),
+    );
+    setTestStarted(false);
+  }, [passage]);
 
   function handleUserInputChange(event) {
     const newInputvalue = event.target.value;

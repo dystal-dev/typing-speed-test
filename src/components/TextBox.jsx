@@ -1,10 +1,18 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
 import getRandomPassage from "../utils/passages.js";
 import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";
 import Button from "./ui/Button.jsx";
 
-export default function TextBox() {
-  const passage = getRandomPassage("hard").text;
+function getCharClass(character, currentIndex) {
+  if (character.index === currentIndex) return "bg-neutral-0/25 rounded-4";
+  if (character.isCorrect === null) return "text-gray-400";
+  if (character.isCorrect) return "text-green-500";
+  return "text-red-500 underline";
+}
+
+export default function TextBox({ difficulty }) {
+  const [passage, setPassage] = useState("");
   const {
     testStarted,
     setTestStarted,
@@ -12,17 +20,22 @@ export default function TextBox() {
     passageCharArray,
     handleUserInputChange,
   } = useTypingSpeedTest(passage);
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    const newPassage = getRandomPassage(difficulty).text;
+    setPassage(newPassage);
+  }, [difficulty]);
+
+  useEffect(() => {
+    if (testStarted) {
+      textareaRef.current.focus();
+    }
+  }, [testStarted]);
 
   const firstNullIndex = passageCharArray.findIndex(
     (c) => c.isCorrect === null,
   );
-
-  function getCharClass(character, currentIndex) {
-    if (character.index === currentIndex) return "bg-neutral-0/25 rounded-4";
-    if (character.isCorrect === null) return "text-gray-400";
-    if (character.isCorrect) return "text-green-500";
-    return "text-red-500 underline";
-  }
 
   return (
     <div className="relative">
@@ -57,6 +70,7 @@ export default function TextBox() {
         autoCapitalize="none"
         onChange={handleUserInputChange}
         value={userInput}
+        ref={textareaRef}
       ></textarea>
     </div>
   );
