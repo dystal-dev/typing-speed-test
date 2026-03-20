@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
 
 export function useTypingSpeedTest(passage) {
-  const [testStarted, setTestStarted] = useState(false);
-  const [userInput, setUserInput] = useState("");
-  const [passageCharArray, setPassageCharArray] = useState(
-    passage.split("").map((char, index) => ({
+  const createPassageCharArray = (passage) => {
+    return passage.split("").map((char, index) => ({
       char,
       index,
       isCorrect: null,
-    })),
+    }));
+  };
+
+  const [testStarted, setTestStarted] = useState(false);
+  const [userInput, setUserInput] = useState("");
+  const [passageCharArray, setPassageCharArray] = useState(
+    createPassageCharArray(passage),
   );
 
   useEffect(() => {
     setUserInput("");
-    setPassageCharArray(
-      passage.split("").map((char, index) => ({
-        char,
-        index,
-        isCorrect: null,
-      })),
-    );
+    setPassageCharArray(createPassageCharArray(passage));
     setTestStarted(false);
   }, [passage]);
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect, useRef } from "react";
 import getRandomPassage from "../utils/passages.js";
 import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";

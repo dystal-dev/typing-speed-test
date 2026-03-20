@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import StatsRow from "./StatsRow";
 import SettingsRow from "./SettingsRow";
