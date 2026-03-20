@@ -4,7 +4,6 @@ import { settingsList } from "../data/settings";
 export default function SettingsRow({ setDifficulty }) {
   const changeDifficulty = (difficulty) => {
     setDifficulty(difficulty);
-    console.log(difficulty);
   };
 
   const changeMode = (mode) => {
