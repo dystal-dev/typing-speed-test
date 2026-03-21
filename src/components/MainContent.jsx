@@ -4,7 +4,7 @@ import SettingsRow from "./SettingsRow";
 import TextBox from "./TextBox";
 import { settingsList } from "../data/settings";
 
-export default function MainContent() {
+export default function MainContent({ testStarted, setTestStarted }) {
   const defaultDifficulty = settingsList.find(
     (setting) => setting.id === "difficulty",
   )?.default;
@@ -17,7 +17,11 @@ export default function MainContent() {
         <StatsRow />
         <SettingsRow setDifficulty={setDifficulty} />
       </div>
-      <TextBox difficulty={difficulty} />
+      <TextBox
+        testStarted={testStarted}
+        setTestStarted={setTestStarted}
+        difficulty={difficulty}
+      />
     </div>
   );
 }

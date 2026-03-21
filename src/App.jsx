@@ -4,14 +4,14 @@ import MainContent from "./components/MainContent";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const maxAppWidthPX = 1440;
-
 function App() {
+  const [testStarted, setTestStarted] = useState(false);
+
   return (
     <div className="grid font-sora px-400 pt-400 pb-800 gap-800 lg:px-1400 lg:py-400 lg:gap-800 max-w-(--app-max-width) mx-auto">
       <Header />
-      <MainContent />
-      <Footer />
+      <MainContent testStarted={testStarted} setTestStarted={setTestStarted} />
+      <Footer testStarted={testStarted} />
     </div>
   );
 }
