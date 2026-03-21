@@ -2,6 +2,7 @@ import { useState } from "react";
 import StatsRow from "./StatsRow";
 import SettingsRow from "./SettingsRow";
 import TextBox from "./TextBox";
+import Results from "./Results";
 import { settingsList } from "../data/settings";
 
 export default function MainContent({ testStarted, setTestStarted }) {
@@ -10,6 +11,7 @@ export default function MainContent({ testStarted, setTestStarted }) {
   )?.default;
 
   const [difficulty, setDifficulty] = useState(defaultDifficulty);
+  const [finished, setFinished] = useState(false);
 
   return (
     <div className="grid gap-8">
@@ -17,11 +19,16 @@ export default function MainContent({ testStarted, setTestStarted }) {
         <StatsRow />
         <SettingsRow setDifficulty={setDifficulty} />
       </div>
-      <TextBox
-        testStarted={testStarted}
-        setTestStarted={setTestStarted}
-        difficulty={difficulty}
-      />
+      {!finished && (
+        <TextBox
+          testStarted={testStarted}
+          setTestStarted={setTestStarted}
+          difficulty={difficulty}
+          finished={finished}
+          setFinished={setFinished}
+        />
+      )}
+      {finished && <Results setFinished={setFinished} />}
     </div>
   );
 }

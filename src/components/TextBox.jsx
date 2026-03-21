@@ -10,10 +10,22 @@ function getCharClass(character, currentIndex) {
   return "text-red-500 underline";
 }
 
-export default function TextBox({ testStarted, setTestStarted, difficulty }) {
+export default function TextBox({
+  testStarted,
+  setTestStarted,
+  difficulty,
+  finished,
+  setFinished,
+}) {
   const [passage, setPassage] = useState("");
   const { userInput, passageCharArray, handleUserInputChange } =
-    useTypingSpeedTest(passage, testStarted, setTestStarted);
+    useTypingSpeedTest(
+      passage,
+      testStarted,
+      setTestStarted,
+      finished,
+      setFinished,
+    );
   const textareaRef = useRef(null);
 
   useEffect(() => {
