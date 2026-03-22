@@ -1,8 +1,8 @@
 import Button from "./Button.jsx";
 import { useState } from "react";
 
-export default function Settings({ label, options, onChange }) {
-  const [active, setActive] = useState(options[0] || "");
+export default function Settings({ label, options, defaultOption, onChange }) {
+  const [active, setActive] = useState(defaultOption);
 
   const handleClick = (option) => {
     setActive(option);

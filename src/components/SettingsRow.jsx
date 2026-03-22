@@ -23,6 +23,7 @@ export default function SettingsRow({ setDifficulty }) {
             key={setting.id}
             label={setting.id}
             options={setting.options}
+            defaultOption={setting.default}
             onChange={handlers[setting.id]}
           />
         ))}
