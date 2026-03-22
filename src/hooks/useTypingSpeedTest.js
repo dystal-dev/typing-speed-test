@@ -61,7 +61,8 @@ export function useTypingSpeedTest(
 
   // timer
   useEffect(() => {
-    if (!testStarted || finished) return;
+    if (!testStarted || finished)
+      return setStats((prev) => ({ ...prev, time: 0 }));
 
     const intervalId = setInterval(() => {
       setStats((prev) => ({
