@@ -1,22 +1,23 @@
 import Stat from "./ui/Stat";
 import { statList } from "../data/stats";
-import { useState } from "react";
+import formatTime from "../utils/formatTime.js";
 
-export default function StatsRow() {
-  const [values, setValues] = useState({
-    WPM: 0,
-    Accuracy: 0,
-    Time: "00:00",
-  });
+export default function StatsRow({ stats }) {
+  function getStatValue(statId) {
+    if (statId === "time") {
+      return formatTime(stats.time);
+    }
+    return stats[statId];
+  }
 
   return (
     <div className="flex divide-x divide-neutral-700">
       {statList.map((stat) => (
         <Stat
-          key={stat.label}
+          key={stat.id}
           label={stat.label}
           color={stat.color}
-          value={values[stat.label]}
+          stats={getStatValue(stat.id)}
         />
       ))}
     </div>

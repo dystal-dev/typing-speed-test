@@ -12,11 +12,16 @@ export default function MainContent({ testStarted, setTestStarted }) {
 
   const [difficulty, setDifficulty] = useState(defaultDifficulty);
   const [finished, setFinished] = useState(false);
+  const [stats, setStats] = useState({
+    wpm: 0,
+    accuracy: 0,
+    time: 0,
+  });
 
   return (
     <div className="grid gap-8">
       <div className="pb-200 border-b-1 border-neutral-700 gap-250 flex flex-col xl:flex-row xl:items-center justify-between">
-        <StatsRow />
+        <StatsRow stats={stats} />
         <SettingsRow setDifficulty={setDifficulty} />
       </div>
       {!finished && (
@@ -26,6 +31,8 @@ export default function MainContent({ testStarted, setTestStarted }) {
           difficulty={difficulty}
           finished={finished}
           setFinished={setFinished}
+          stats={stats}
+          setStats={setStats}
         />
       )}
       {finished && <Results setFinished={setFinished} />}

@@ -16,8 +16,13 @@ export default function TextBox({
   difficulty,
   finished,
   setFinished,
+  stats,
+  setStats,
 }) {
+  const textareaRef = useRef(null);
   const [passage, setPassage] = useState("");
+
+  // HOOK
   const { userInput, passageCharArray, handleUserInputChange } =
     useTypingSpeedTest(
       passage,
@@ -25,9 +30,16 @@ export default function TextBox({
       setTestStarted,
       finished,
       setFinished,
+      stats,
+      setStats,
     );
-  const textareaRef = useRef(null);
 
+  // find the current cursor position (first untyped character)
+  const firstNullIndex = passageCharArray.findIndex(
+    (c) => c.isCorrect === null,
+  );
+
+  // EFFECTS
   useEffect(() => {
     const newPassage = getRandomPassage(difficulty).text;
     setPassage(newPassage);
@@ -38,10 +50,6 @@ export default function TextBox({
       textareaRef.current.focus();
     }
   }, [testStarted]);
-
-  const firstNullIndex = passageCharArray.findIndex(
-    (c) => c.isCorrect === null,
-  );
 
   return (
     <div className="relative">
