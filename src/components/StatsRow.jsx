@@ -1,11 +1,15 @@
 import Stat from "./ui/Stat";
 import { statList } from "../data/stats";
 import formatTime from "../utils/formatTime.js";
+import formatAccuracy from "../utils/formatAccuracy.js";
 
 export default function StatsRow({ stats }) {
   function getStatValue(statId) {
     if (statId === "time") {
       return formatTime(stats.time);
+    }
+    if (statId === "accuracy") {
+      return formatAccuracy(stats.accuracy);
     }
     return stats[statId];
   }

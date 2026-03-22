@@ -16,7 +16,6 @@ export default function TextBox({
   difficulty,
   finished,
   setFinished,
-  stats,
   setStats,
 }) {
   const textareaRef = useRef(null);
@@ -30,7 +29,6 @@ export default function TextBox({
       setTestStarted,
       finished,
       setFinished,
-      stats,
       setStats,
     );
 
@@ -59,7 +57,7 @@ export default function TextBox({
             <Button variant="primary" onClick={() => setTestStarted(true)}>
               Start Typing Test
             </Button>
-            <span class="text-preset-3-semiBold">
+            <span className="text-preset-3-semiBold">
               Or click the text and start typing
             </span>
           </div>

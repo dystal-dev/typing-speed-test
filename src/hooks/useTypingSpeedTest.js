@@ -6,7 +6,6 @@ export function useTypingSpeedTest(
   setTestStarted,
   finished,
   setFinished,
-  stats,
   setStats,
 ) {
   // UTILITY FUNCTIONS
@@ -18,14 +17,39 @@ export function useTypingSpeedTest(
     }));
   };
 
+  // WPM formula = (characters_typed / 5) * (60 / time_in_seconds)
+  // AWPM = WPM x Accuracy (rounded down)
+
+  // Accuracy formula = (correct_characters_typed / total_characters_typed) * 100
   function checkTypingAccuracy(inputValue) {
+    let newErrorsMade = errorsMade;
     const inputArray = inputValue.split("");
-    const updatedArray = passageCharArray.map((item, i) => ({
+    const updatedPassageArray = passageCharArray.map((item, i) => ({
       ...item,
       isCorrect: i < inputArray.length ? inputArray[i] === item.char : null,
     }));
+    setPassageCharArray(updatedPassageArray);
 
-    setPassageCharArray(updatedArray);
+    if (inputValue.length > userInput.length) {
+      const latestChar = inputArray[inputArray.length - 1];
+      const expectedChar = passageCharArray[inputArray.length - 1]?.char;
+      const wasCorrect = latestChar === expectedChar;
+
+      if (!wasCorrect) {
+        setErrorsMade((prev) => prev + 1);
+        newErrorsMade = errorsMade + 1;
+      }
+    }
+
+    const correctCount = updatedPassageArray.filter(
+      (c) => c.isCorrect === true,
+    ).length;
+    const accuracy = (correctCount / (correctCount + newErrorsMade)) * 100;
+
+    setStats((prev) => ({
+      ...prev,
+      accuracy: accuracy,
+    }));
   }
 
   // STATES
@@ -33,6 +57,7 @@ export function useTypingSpeedTest(
   const [passageCharArray, setPassageCharArray] = useState(
     createPassageCharArray(passage),
   );
+  const [errorsMade, setErrorsMade] = useState(0);
 
   // EVENT HANDLERS
   function handleUserInputChange(event) {
@@ -57,12 +82,13 @@ export function useTypingSpeedTest(
     setUserInput("");
     setPassageCharArray(createPassageCharArray(passage));
     setTestStarted(false);
+    setStats({ wpm: 0, accuracy: 0, time: 0 });
+    setErrorsMade(0);
   }, [passage]);
 
   // timer
   useEffect(() => {
-    if (!testStarted || finished)
-      return setStats((prev) => ({ ...prev, time: 0 }));
+    if (!testStarted || finished) return;
 
     const intervalId = setInterval(() => {
       setStats((prev) => ({
