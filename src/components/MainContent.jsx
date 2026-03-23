@@ -5,18 +5,22 @@ import TextBox from "./TextBox";
 import Results from "./Results";
 import { settingsList } from "../data/settings";
 
-export default function MainContent({ testStarted, setTestStarted }) {
+export default function MainContent({
+  testStarted,
+  setTestStarted,
+  userInput,
+  passageCharArray,
+  handleUserInputChange,
+  stats,
+  setPassage,
+  finished,
+  setFinished,
+}) {
   const defaultDifficulty = settingsList.find(
     (setting) => setting.id === "difficulty",
   )?.default;
 
   const [difficulty, setDifficulty] = useState(defaultDifficulty);
-  const [finished, setFinished] = useState(false);
-  const [stats, setStats] = useState({
-    wpm: 0,
-    accuracy: 0,
-    time: 0,
-  });
 
   return (
     <div className="grid gap-8">
@@ -28,11 +32,11 @@ export default function MainContent({ testStarted, setTestStarted }) {
         <TextBox
           testStarted={testStarted}
           setTestStarted={setTestStarted}
+          userInput={userInput}
+          passageCharArray={passageCharArray}
+          handleUserInputChange={handleUserInputChange}
+          setPassage={setPassage}
           difficulty={difficulty}
-          finished={finished}
-          setFinished={setFinished}
-          stats={stats}
-          setStats={setStats}
         />
       )}
       {finished && <Results setFinished={setFinished} />}
