@@ -10,6 +10,7 @@ export function useTypingSpeedTest(
   setTestStarted,
   finished,
   setFinished,
+  stats,
   setStats,
 ) {
   // UTILITY FUNCTIONS
@@ -73,7 +74,7 @@ export function useTypingSpeedTest(
     setErrorsMade(0);
   }, [passage]);
 
-  // accuracy calculator
+  // stats calculator
   useEffect(() => {
     const correctCount = passageCharArray.filter(
       (c) => c.isCorrect === true,
@@ -84,11 +85,19 @@ export function useTypingSpeedTest(
         ? 100
         : (correctCount / (correctCount + errorsMade)) * 100;
 
+    const wpm =
+      stats.time === 0
+        ? 0
+        : Math.floor(
+            (userInput.length / 5) * (60 / stats.time) * (accuracy / 100),
+          );
+
     setStats((prev) => ({
       ...prev,
+      wpm,
       accuracy,
     }));
-  }, [passageCharArray, errorsMade]);
+  }, [stats.time, passageCharArray, errorsMade]);
 
   // timer
   useEffect(() => {

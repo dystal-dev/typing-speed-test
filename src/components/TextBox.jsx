@@ -16,6 +16,7 @@ export default function TextBox({
   difficulty,
   finished,
   setFinished,
+  stats,
   setStats,
 }) {
   const textareaRef = useRef(null);
@@ -29,6 +30,7 @@ export default function TextBox({
       setTestStarted,
       finished,
       setFinished,
+      stats,
       setStats,
     );
 

@@ -31,6 +31,7 @@ export default function MainContent({ testStarted, setTestStarted }) {
           difficulty={difficulty}
           finished={finished}
           setFinished={setFinished}
+          stats={stats}
           setStats={setStats}
         />
       )}
