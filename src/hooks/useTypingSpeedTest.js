@@ -4,24 +4,7 @@ import { useState, useEffect } from "react";
 // AWPM = WPM x Accuracy (rounded down)
 // Accuracy = (correct_characters_typed / total_characters_typed) * 100
 
-export function useTypingSpeedTest(
-  passage,
-  testStarted,
-  setTestStarted,
-  finished,
-  setFinished,
-  stats,
-  setStats,
-) {
-  // UTILITY FUNCTIONS
-  const createPassageCharArray = (passage) => {
-    return passage.split("").map((char, index) => ({
-      char,
-      index,
-      isCorrect: null,
-    }));
-  };
-
+export function useTypingSpeedTest() {
   // HELPERS
   function processUserInput(inputValue) {
     const inputArray = inputValue.split("");
@@ -40,12 +23,36 @@ export function useTypingSpeedTest(
     }
   }
 
+  function resetTest() {
+    setUserInput("");
+    setStats({ wpm: 0, accuracy: 0, time: 0 });
+    setErrorsMade(0);
+    setPassageCharArray(createPassageCharArray(passage));
+  }
+
+  // UTILITY FUNCTIONS
+  const createPassageCharArray = (passage) => {
+    return passage.split("").map((char, index) => ({
+      char,
+      index,
+      isCorrect: null,
+    }));
+  };
+
   // STATES
-  const [userInput, setUserInput] = useState("");
+  const [passage, setPassage] = useState("");
   const [passageCharArray, setPassageCharArray] = useState(
     createPassageCharArray(passage),
   );
+  const [testStarted, setTestStarted] = useState(false);
+  const [userInput, setUserInput] = useState("");
   const [errorsMade, setErrorsMade] = useState(0);
+  const [stats, setStats] = useState({
+    wpm: 0,
+    accuracy: 0,
+    time: 0,
+  });
+  const [finished, setFinished] = useState(false);
 
   // EVENT HANDLERS
   function handleUserInputChange(event) {
@@ -67,11 +74,8 @@ export function useTypingSpeedTest(
   // EFFECTS
   // reset test when passage changes
   useEffect(() => {
-    setUserInput("");
-    setPassageCharArray(createPassageCharArray(passage));
+    resetTest();
     setTestStarted(false);
-    setStats({ wpm: 0, accuracy: 0, time: 0 });
-    setErrorsMade(0);
   }, [passage]);
 
   // stats calculator
@@ -119,5 +123,10 @@ export function useTypingSpeedTest(
     userInput,
     passageCharArray,
     handleUserInputChange,
+    stats,
+    setPassage,
+    finished,
+    setFinished,
+    resetTest,
   };
 }

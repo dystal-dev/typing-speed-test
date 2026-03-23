@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import getRandomPassage from "../utils/passages.js";
-import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";
 import Button from "./ui/Button.jsx";
 
 function getCharClass(character, currentIndex) {
@@ -13,26 +12,13 @@ function getCharClass(character, currentIndex) {
 export default function TextBox({
   testStarted,
   setTestStarted,
+  userInput,
+  passageCharArray,
+  handleUserInputChange,
+  setPassage,
   difficulty,
-  finished,
-  setFinished,
-  stats,
-  setStats,
 }) {
   const textareaRef = useRef(null);
-  const [passage, setPassage] = useState("");
-
-  // HOOK
-  const { userInput, passageCharArray, handleUserInputChange } =
-    useTypingSpeedTest(
-      passage,
-      testStarted,
-      setTestStarted,
-      finished,
-      setFinished,
-      stats,
-      setStats,
-    );
 
   // find the current cursor position (first untyped character)
   const firstNullIndex = passageCharArray.findIndex(
