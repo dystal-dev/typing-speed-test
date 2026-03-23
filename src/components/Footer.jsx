@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "./ui/Button.jsx";
-import { useTypingSpeedTest } from "../hooks/useTypingSpeedTest.js";
-
-export default function Footer({ testStarted }) {
+export default function Footer({ testStarted, resetTest }) {
   return (
     <div className="mx-auto">
-      {testStarted && <Button variant="secondary-muted">Restart Test</Button>}
+      {testStarted && (
+        <Button variant="secondary-muted" onClick={resetTest}>
+          Restart Test
+        </Button>
+      )}
     </div>
   );
 }
