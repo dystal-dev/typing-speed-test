@@ -21,6 +21,7 @@ export function useTypingSpeedTest(
     }));
   };
 
+  // HELPERS
   function processUserInput(inputValue) {
     const inputArray = inputValue.split("");
     const updatedPassageArray = passageCharArray.map((item, i) => ({
@@ -103,7 +104,6 @@ export function useTypingSpeedTest(
     return () => clearInterval(intervalId);
   }, [testStarted, finished]);
 
-  // RETURN
   return {
     testStarted,
     setTestStarted,
