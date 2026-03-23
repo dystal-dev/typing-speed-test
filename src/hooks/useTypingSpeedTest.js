@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 
+// WPM = (characters_typed / 5) * (60 / time_in_seconds)
+// AWPM = WPM x Accuracy (rounded down)
+// Accuracy = (correct_characters_typed / total_characters_typed) * 100
+
 export function useTypingSpeedTest(
   passage,
   testStarted,
@@ -17,12 +21,7 @@ export function useTypingSpeedTest(
     }));
   };
 
-  // WPM formula = (characters_typed / 5) * (60 / time_in_seconds)
-  // AWPM = WPM x Accuracy (rounded down)
-
-  // Accuracy formula = (correct_characters_typed / total_characters_typed) * 100
-  function checkTypingAccuracy(inputValue) {
-    let newErrorsMade = errorsMade;
+  function processUserInput(inputValue) {
     const inputArray = inputValue.split("");
     const updatedPassageArray = passageCharArray.map((item, i) => ({
       ...item,
@@ -31,25 +30,12 @@ export function useTypingSpeedTest(
     setPassageCharArray(updatedPassageArray);
 
     if (inputValue.length > userInput.length) {
-      const latestChar = inputArray[inputArray.length - 1];
-      const expectedChar = passageCharArray[inputArray.length - 1]?.char;
-      const wasCorrect = latestChar === expectedChar;
+      const i = inputValue.length - 1;
 
-      if (!wasCorrect) {
+      if (inputValue[i] !== passageCharArray[i]?.char) {
         setErrorsMade((prev) => prev + 1);
-        newErrorsMade = errorsMade + 1;
       }
     }
-
-    const correctCount = updatedPassageArray.filter(
-      (c) => c.isCorrect === true,
-    ).length;
-    const accuracy = (correctCount / (correctCount + newErrorsMade)) * 100;
-
-    setStats((prev) => ({
-      ...prev,
-      accuracy: accuracy,
-    }));
   }
 
   // STATES
@@ -64,7 +50,7 @@ export function useTypingSpeedTest(
     const newInputvalue = event.target.value;
 
     setUserInput(newInputvalue);
-    checkTypingAccuracy(newInputvalue);
+    processUserInput(newInputvalue);
 
     if (newInputvalue.length >= passage.length) {
       setFinished(true);
@@ -85,6 +71,23 @@ export function useTypingSpeedTest(
     setStats({ wpm: 0, accuracy: 0, time: 0 });
     setErrorsMade(0);
   }, [passage]);
+
+  // accuracy calculator
+  useEffect(() => {
+    const correctCount = passageCharArray.filter(
+      (c) => c.isCorrect === true,
+    ).length;
+
+    const accuracy =
+      correctCount === 0 && errorsMade === 0
+        ? 100
+        : (correctCount / (correctCount + errorsMade)) * 100;
+
+    setStats((prev) => ({
+      ...prev,
+      accuracy,
+    }));
+  }, [passageCharArray, errorsMade]);
 
   // timer
   useEffect(() => {
