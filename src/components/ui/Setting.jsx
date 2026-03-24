@@ -4,8 +4,8 @@ import { useState } from "react";
 export default function Settings({ label, options, defaultOption, onChange }) {
   const [active, setActive] = useState(defaultOption);
 
-  const handleClick = (option) => {
-    setActive(option);
+  const handleClick = (option, index) => {
+    setActive(index);
     if (onChange) onChange(option);
   };
 
@@ -15,16 +15,16 @@ export default function Settings({ label, options, defaultOption, onChange }) {
       className="text-preset-5 text-neutral-400 gap-75 flex items-center px-200 last:pr-0 first:pl-0"
     >
       <span className="pr-75 capitalize">{label}:</span>
-      {options.map((option) => (
-        <li key={option}>
+      {options.map((option, index) => (
+        <li key={option.id}>
           <Button
             variant="settings"
             className={
-              active === option ? "!text-blue-400 !border-blue-400" : ""
+              active === index ? "!text-blue-400 !border-blue-400" : ""
             }
-            onClick={() => handleClick(option)}
+            onClick={() => handleClick(option, index)}
           >
-            {option}
+            {option.label}
           </Button>
         </li>
       ))}

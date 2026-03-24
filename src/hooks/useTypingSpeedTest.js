@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-
-// WPM = (characters_typed / 5) * (60 / time_in_seconds)
-// AWPM = WPM x Accuracy (rounded down)
-// Accuracy = (correct_characters_typed / total_characters_typed) * 100
+import { settingsList } from "../data/settings";
+import getRandomPassage from "../utils/passages.js";
 
 export function useTypingSpeedTest() {
   // HELPERS
+  function getNewPassage() {
+    const newPassage = getRandomPassage(difficulty).text;
+    setPassage(newPassage);
+  }
+
   function processUserInput(inputValue) {
     const inputArray = inputValue.split("");
     const updatedPassageArray = passageCharArray.map((item, i) => ({
@@ -18,7 +21,9 @@ export function useTypingSpeedTest() {
       const i = inputValue.length - 1;
 
       if (inputValue[i] !== passageCharArray[i]?.char) {
-        setErrorsMade((prev) => prev + 1);
+        setErrorCount((prev) => prev + 1);
+      } else {
+        setCorrectCount((prev) => prev + 1);
       }
     }
   }
@@ -26,7 +31,9 @@ export function useTypingSpeedTest() {
   function resetTest() {
     setUserInput("");
     setStats({ wpm: 0, accuracy: 0, time: 0 });
-    setErrorsMade(0);
+    setPreviousPassagesLength(0);
+    setErrorCount(0);
+    setCorrectCount(0);
     setPassageCharArray(createPassageCharArray(passage));
   }
 
@@ -46,24 +53,41 @@ export function useTypingSpeedTest() {
   );
   const [testStarted, setTestStarted] = useState(false);
   const [userInput, setUserInput] = useState("");
-  const [errorsMade, setErrorsMade] = useState(0);
+  const [previousPassagesLength, setPreviousPassagesLength] = useState(0);
+  const [errorCount, setErrorCount] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
   const [stats, setStats] = useState({
     wpm: 0,
     accuracy: 0,
     time: 0,
   });
   const [finished, setFinished] = useState(false);
+  const modeSettings = settingsList.find((setting) => setting.id === "mode");
+  const defaultMode = modeSettings?.options[modeSettings.default];
+  const [mode, setMode] = useState(defaultMode);
+  const difficultySettings = settingsList.find(
+    (setting) => setting.id === "difficulty",
+  );
+  const defaultDifficulty =
+    difficultySettings?.options[difficultySettings.default];
+  const [difficulty, setDifficulty] = useState(defaultDifficulty);
 
   // EVENT HANDLERS
   function handleUserInputChange(event) {
-    const newInputvalue = event.target.value;
+    const newInputValue = event.target.value;
 
-    setUserInput(newInputvalue);
-    processUserInput(newInputvalue);
+    setUserInput(newInputValue);
+    processUserInput(newInputValue);
 
-    if (newInputvalue.length >= passage.length) {
-      setFinished(true);
-      setTestStarted(false);
+    if (newInputValue.length >= passage.length) {
+      if (mode.type === "passage") {
+        setFinished(true);
+        setTestStarted(false);
+      } else if (mode.type === "timed") {
+        getNewPassage();
+        setUserInput("");
+        setPreviousPassagesLength((prev) => prev + passage.length);
+      }
     }
 
     if (!testStarted) {
@@ -71,29 +95,54 @@ export function useTypingSpeedTest() {
     }
   }
 
+  useEffect(() => {
+    console.log({
+      passage,
+      testStarted,
+      previousPassagesLength,
+      errorCount,
+      correctCount,
+      ...stats,
+      finished,
+      mode,
+      difficulty,
+    });
+  }, [userInput]);
+
   // EFFECTS
+  useEffect(() => {
+    setPassageCharArray(createPassageCharArray(passage));
+  }, [passage]);
+
+  // get new passage when difficulty changes
+  useEffect(() => {
+    getNewPassage();
+  }, [difficulty]);
+
   // reset test when passage changes
   useEffect(() => {
-    resetTest();
-    setTestStarted(false);
+    if (mode.type === "passage") {
+      resetTest();
+      setTestStarted(false);
+    } else if (mode.type === "timed" && !testStarted) {
+      resetTest();
+    }
   }, [passage]);
 
   // stats calculator
   useEffect(() => {
-    const correctCount = passageCharArray.filter(
-      (c) => c.isCorrect === true,
-    ).length;
-
     const accuracy =
-      correctCount === 0 && errorsMade === 0
+      correctCount === 0 && errorCount === 0
         ? 100
-        : (correctCount / (correctCount + errorsMade)) * 100;
+        : (correctCount / (correctCount + errorCount)) * 100;
 
     const wpm =
       stats.time === 0
         ? 0
         : Math.floor(
-            (userInput.length / 5) * (60 / stats.time) * (accuracy / 100),
+            ((previousPassagesLength + userInput.length) / 5) *
+              (60 / stats.time) *
+              (accuracy / 100),
           );
 
     setStats((prev) => ({
@@ -101,7 +150,7 @@ export function useTypingSpeedTest() {
       wpm,
       accuracy,
     }));
-  }, [stats.time, passageCharArray, errorsMade]);
+  }, [stats.time, passageCharArray, errorCount]);
 
   // timer
   useEffect(() => {
@@ -117,7 +166,16 @@ export function useTypingSpeedTest() {
     return () => clearInterval(intervalId);
   }, [testStarted, finished]);
 
+  // stops test for timed mode
+  useEffect(() => {
+    if (stats.time >= mode.startTime) {
+      setFinished(true);
+      setTestStarted(false);
+    }
+  }, [stats.time]);
+
   return {
+    getNewPassage,
     testStarted,
     setTestStarted,
     userInput,
@@ -128,5 +186,9 @@ export function useTypingSpeedTest() {
     finished,
     setFinished,
     resetTest,
+    mode,
+    setMode,
+    difficulty,
+    setDifficulty,
   };
 }

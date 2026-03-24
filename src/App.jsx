@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import MainContent from "./components/MainContent";
 import Header from "./components/Header";
@@ -7,6 +6,7 @@ import { useTypingSpeedTest } from "./hooks/useTypingSpeedTest";
 
 function App() {
   const {
+    getNewPassage,
     testStarted,
     setTestStarted,
     userInput,
@@ -17,12 +17,17 @@ function App() {
     finished,
     setFinished,
     resetTest,
+    mode,
+    setMode,
+    difficulty,
+    setDifficulty,
   } = useTypingSpeedTest();
 
   return (
     <div className="grid font-sora px-400 pt-400 pb-800 gap-800 lg:px-1400 lg:py-400 lg:gap-800 max-w-(--app-max-width) mx-auto">
       <Header />
       <MainContent
+        getNewPassage={getNewPassage}
         testStarted={testStarted}
         setTestStarted={setTestStarted}
         userInput={userInput}
@@ -32,6 +37,11 @@ function App() {
         setPassage={setPassage}
         finished={finished}
         setFinished={setFinished}
+        resetTest={resetTest}
+        mode={mode}
+        setMode={setMode}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
       />
       <Footer testStarted={testStarted} resetTest={resetTest} />
     </div>

@@ -3,10 +3,10 @@ import { statList } from "../data/stats";
 import formatTime from "../utils/formatTime.js";
 import formatAccuracy from "../utils/formatAccuracy.js";
 
-export default function StatsRow({ stats }) {
+export default function StatsRow({ stats, mode }) {
   function getStatValue(statId) {
     if (statId === "time") {
-      return formatTime(stats.time);
+      return formatTime(stats.time, mode);
     }
     if (statId === "accuracy") {
       return formatAccuracy(stats.accuracy);

@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import getRandomPassage from "../utils/passages.js";
+import { useEffect, useRef } from "react";
 import Button from "./ui/Button.jsx";
 
 function getCharClass(character, currentIndex) {
@@ -15,8 +14,6 @@ export default function TextBox({
   userInput,
   passageCharArray,
   handleUserInputChange,
-  setPassage,
-  difficulty,
 }) {
   const textareaRef = useRef(null);
 
@@ -24,12 +21,6 @@ export default function TextBox({
   const firstNullIndex = passageCharArray.findIndex(
     (c) => c.isCorrect === null,
   );
-
-  // EFFECTS
-  useEffect(() => {
-    const newPassage = getRandomPassage(difficulty).text;
-    setPassage(newPassage);
-  }, [difficulty]);
 
   useEffect(() => {
     if (testStarted) {

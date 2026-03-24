@@ -6,7 +6,7 @@ export default function getRandomPassage(difficulty) {
     return randomNum;
   };
 
-  const passage = data[difficulty];
+  const passage = data[difficulty.id];
   const selectedPassage = passage[generateRandomNumber(passage.length)];
   return selectedPassage;
 }

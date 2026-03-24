@@ -1,11 +1,10 @@
-import { useState } from "react";
 import StatsRow from "./StatsRow";
 import SettingsRow from "./SettingsRow";
 import TextBox from "./TextBox";
 import Results from "./Results";
-import { settingsList } from "../data/settings";
 
 export default function MainContent({
+  getNewPassage,
   testStarted,
   setTestStarted,
   userInput,
@@ -15,18 +14,17 @@ export default function MainContent({
   setPassage,
   finished,
   setFinished,
+  resetTest,
+  mode,
+  setMode,
+  difficulty,
+  setDifficulty,
 }) {
-  const defaultDifficulty = settingsList.find(
-    (setting) => setting.id === "difficulty",
-  )?.default;
-
-  const [difficulty, setDifficulty] = useState(defaultDifficulty);
-
   return (
     <div className="grid gap-8">
       <div className="pb-200 border-b-1 border-neutral-700 gap-250 flex flex-col xl:flex-row xl:items-center justify-between">
-        <StatsRow stats={stats} />
-        <SettingsRow setDifficulty={setDifficulty} />
+        <StatsRow stats={stats} mode={mode} />
+        <SettingsRow setDifficulty={setDifficulty} setMode={setMode} />
       </div>
       {!finished && (
         <TextBox
@@ -39,7 +37,13 @@ export default function MainContent({
           difficulty={difficulty}
         />
       )}
-      {finished && <Results setFinished={setFinished} />}
+      {finished && (
+        <Results
+          resetTest={resetTest}
+          getNewPassage={getNewPassage}
+          setFinished={setFinished}
+        />
+      )}
     </div>
   );
 }
