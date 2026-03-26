@@ -50,6 +50,10 @@
   --radius-20: 20px;
   --radius-24: 24px;
   --radius-full: 999px;
+
+  --shadow-green-glow:
+    0px 0px 0px 16px color-mix(in srgb, var(--color-green-500) 20%, transparent),
+    0px 0px 0px 32px color-mix(in srgb, var(--color-green-500) 10%, transparent);
 }
 
 @layer base {
