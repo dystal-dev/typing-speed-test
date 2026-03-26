@@ -19,6 +19,7 @@ function App() {
     handleModeChange,
     handleUserInputChange,
     handleReset,
+    handleRestart,
     handleStart,
   } = useTypingSpeedTest();
 
@@ -41,7 +42,7 @@ function App() {
         onReset={handleReset}
         onStart={handleStart}
       />
-      <Footer status={status} onReset={handleReset} />
+      <Footer status={status} onRestart={handleRestart} />
     </div>
   );
 }

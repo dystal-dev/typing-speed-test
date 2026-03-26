@@ -4,6 +4,7 @@ import getRandomPassage from "../utils/passages.js";
 
 const ACTIONS = {
   RESET_TEST: "reset_test",
+  RESTART_TEST: "restart_test",
   DIFFICULTY_CHANGED: "difficulty_changed",
   MODE_CHANGED: "mode_changed",
   USER_TYPED: "user_typed",
@@ -44,6 +45,8 @@ function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.RESET_TEST:
       return getResetState(state, action.payload);
+    case ACTIONS.RESTART_TEST:
+      return { ...getResetState(state, state.passage), status: "active" };
     case ACTIONS.DIFFICULTY_CHANGED:
       return getResetState(
         { ...state, difficulty: action.payload.difficulty },
@@ -191,6 +194,10 @@ export function useTypingSpeedTest() {
     });
   }
 
+  function handleRestart() {
+    dispatch({ type: ACTIONS.RESTART_TEST });
+  }
+
   function handleStart() {
     dispatch({
       type: ACTIONS.START_TEST,
@@ -211,6 +218,7 @@ export function useTypingSpeedTest() {
     handleModeChange,
     handleUserInputChange,
     handleReset,
+    handleRestart,
     handleStart,
   };
 }
