@@ -210,6 +210,7 @@ export function useTypingSpeedTest() {
     errorCount: state.errorCount,
     correctCount: state.correctCount,
     mode: state.mode,
+    difficulty: state.difficulty,
     passageCharArray,
     wpm,
     accuracy,

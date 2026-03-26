@@ -11,6 +11,7 @@ function App() {
     errorCount,
     correctCount,
     mode,
+    difficulty,
     passageCharArray,
     wpm,
     accuracy,
@@ -32,6 +33,7 @@ function App() {
         errorCount={errorCount}
         correctCount={correctCount}
         mode={mode}
+        difficulty={difficulty}
         passageCharArray={passageCharArray}
         wpm={wpm}
         accuracy={accuracy}

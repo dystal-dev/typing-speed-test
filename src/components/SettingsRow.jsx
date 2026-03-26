@@ -1,7 +1,12 @@
 import Setting from "./ui/Setting";
 import { settingsList } from "../data/settings";
 
-export default function SettingsRow({ onDifficultyChange, onModeChange }) {
+export default function SettingsRow({
+  mode,
+  difficulty,
+  onDifficultyChange,
+  onModeChange,
+}) {
   const changeDifficulty = (difficulty) => {
     onDifficultyChange(difficulty);
   };
@@ -23,7 +28,7 @@ export default function SettingsRow({ onDifficultyChange, onModeChange }) {
             key={setting.id}
             label={setting.id}
             options={setting.options}
-            defaultOption={setting.default}
+            activeId={setting.id === "mode" ? mode.id : difficulty.id}
             onChange={handlers[setting.id]}
           />
         ))}

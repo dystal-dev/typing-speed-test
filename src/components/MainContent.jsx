@@ -9,6 +9,7 @@ export default function MainContent({
   errorCount,
   correctCount,
   mode,
+  difficulty,
   passageCharArray,
   wpm,
   accuracy,
@@ -26,6 +27,8 @@ export default function MainContent({
           <div className="pb-200 border-b-1 border-neutral-700 gap-250 flex flex-col xl:flex-row xl:items-center justify-between">
             <StatsRow stats={{ wpm, accuracy, time }} mode={mode} />
             <SettingsRow
+              mode={mode}
+              difficulty={difficulty}
               onDifficultyChange={onDifficultyChange}
               onModeChange={onModeChange}
             />
