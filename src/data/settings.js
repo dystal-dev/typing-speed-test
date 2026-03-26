@@ -24,7 +24,7 @@ export const settingsList = [
         id: "timed_60",
         label: "Timed (60s)",
         type: "timed",
-        startTime: 10,
+        startTime: 60,
       },
       {
         id: "passage",

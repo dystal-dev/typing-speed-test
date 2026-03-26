@@ -9,11 +9,11 @@ function getCharClass(character, currentIndex) {
 }
 
 export default function TextBox({
-  testStarted,
-  setTestStarted,
+  status,
   userInput,
   passageCharArray,
-  handleUserInputChange,
+  onUserInputChange,
+  onStart,
 }) {
   const textareaRef = useRef(null);
 
@@ -23,17 +23,17 @@ export default function TextBox({
   );
 
   useEffect(() => {
-    if (testStarted) {
+    if (status === "active") {
       textareaRef.current.focus();
     }
-  }, [testStarted]);
+  }, [status]);
 
   return (
     <div className="relative">
-      {!testStarted && (
+      {status === "idle" && (
         <div className="absolute -inset-8 z-10 flex pointer-events-none backdrop-blur-sm">
           <div className="flex flex-col m-auto h-auto gap-250 items-center pointer-events-auto">
-            <Button variant="primary" onClick={() => setTestStarted(true)}>
+            <Button variant="primary" onClick={() => onStart()}>
               Start Typing Test
             </Button>
             <span className="text-preset-3-semiBold">
@@ -59,7 +59,7 @@ export default function TextBox({
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"
-        onChange={handleUserInputChange}
+        onChange={onUserInputChange}
         value={userInput}
         ref={textareaRef}
       ></textarea>

@@ -1,13 +1,13 @@
 import Setting from "./ui/Setting";
 import { settingsList } from "../data/settings";
 
-export default function SettingsRow({ setDifficulty, setMode }) {
+export default function SettingsRow({ onDifficultyChange, onModeChange }) {
   const changeDifficulty = (difficulty) => {
-    setDifficulty(difficulty);
+    onDifficultyChange(difficulty);
   };
 
   const changeMode = (mode) => {
-    setMode(mode);
+    onModeChange(mode);
   };
 
   const handlers = {
