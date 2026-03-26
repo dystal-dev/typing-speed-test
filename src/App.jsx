@@ -8,6 +8,8 @@ function App() {
   const {
     status,
     userInput,
+    errorCount,
+    correctCount,
     mode,
     passageCharArray,
     wpm,
@@ -26,6 +28,8 @@ function App() {
       <MainContent
         status={status}
         userInput={userInput}
+        errorCount={errorCount}
+        correctCount={correctCount}
         mode={mode}
         passageCharArray={passageCharArray}
         wpm={wpm}

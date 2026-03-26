@@ -200,6 +200,8 @@ export function useTypingSpeedTest() {
   return {
     status: state.status,
     userInput: state.userInput,
+    errorCount: state.errorCount,
+    correctCount: state.correctCount,
     mode: state.mode,
     passageCharArray,
     wpm,

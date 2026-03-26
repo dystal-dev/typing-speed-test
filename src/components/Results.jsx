@@ -1,7 +1,13 @@
 import React from "react";
 import Button from "./ui/Button.jsx";
 
-export default function Results({ onReset }) {
+export default function Results({
+  onReset,
+  wpm,
+  accuracy,
+  errorCount,
+  correctCount,
+}) {
   return (
     <div className="flex flex-col pt-300 gap-400">
       <di className="flex flex-col items-center pt-300 gap-125">
@@ -11,9 +17,11 @@ export default function Results({ onReset }) {
         </h2>
       </di>
       <div className="flex flex-row justify-center pt-250 pb-400 gap-250">
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
+        <div>{wpm}</div>
+        <div>{accuracy}%</div>
+        <div>
+          {errorCount}/{correctCount}
+        </div>
       </div>
       <div className="flex justify-center">
         <Button
