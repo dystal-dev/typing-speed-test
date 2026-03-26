@@ -1,194 +1,214 @@
-import { useState, useEffect } from "react";
+import { useEffect, useReducer, useRef, useMemo } from "react";
 import { settingsList } from "../data/settings";
 import getRandomPassage from "../utils/passages.js";
 
-export function useTypingSpeedTest() {
-  // HELPERS
-  function getNewPassage() {
-    const newPassage = getRandomPassage(difficulty).text;
-    setPassage(newPassage);
-  }
+const ACTIONS = {
+  RESET_TEST: "reset_test",
+  DIFFICULTY_CHANGED: "difficulty_changed",
+  MODE_CHANGED: "mode_changed",
+  USER_TYPED: "user_typed",
+  TEST_FINISHED: "test_finished",
+  TIMED_PASSAGE_COMPLETED: "timed_passage_completed",
+  TIMER_TICKED: "timer_ticked",
+  START_TEST: "start_test",
+};
 
-  function processUserInput(inputValue) {
-    const inputArray = inputValue.split("");
-    const updatedPassageArray = passageCharArray.map((item, i) => ({
-      ...item,
-      isCorrect: i < inputArray.length ? inputArray[i] === item.char : null,
-    }));
-    setPassageCharArray(updatedPassageArray);
-
-    if (inputValue.length > userInput.length) {
-      const i = inputValue.length - 1;
-
-      if (inputValue[i] !== passageCharArray[i]?.char) {
-        setErrorCount((prev) => prev + 1);
-      } else {
-        setCorrectCount((prev) => prev + 1);
-      }
-    }
-  }
-
-  function resetTest() {
-    setUserInput("");
-    setStats({ wpm: 0, accuracy: 0, time: 0 });
-    setPreviousPassagesLength(0);
-    setErrorCount(0);
-    setCorrectCount(0);
-    setPassageCharArray(createPassageCharArray(passage));
-  }
-
-  // UTILITY FUNCTIONS
-  const createPassageCharArray = (passage) => {
-    return passage.split("").map((char, index) => ({
-      char,
-      index,
-      isCorrect: null,
-    }));
-  };
-
-  // STATES
-  const [passage, setPassage] = useState("");
-  const [passageCharArray, setPassageCharArray] = useState(
-    createPassageCharArray(passage),
-  );
-  const [testStarted, setTestStarted] = useState(false);
-  const [userInput, setUserInput] = useState("");
-  const [previousPassagesLength, setPreviousPassagesLength] = useState(0);
-  const [errorCount, setErrorCount] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [stats, setStats] = useState({
-    wpm: 0,
-    accuracy: 0,
+function getInitialState(defaultMode, defaultDifficulty) {
+  return {
+    status: "idle",
+    passage: getRandomPassage(defaultDifficulty).text,
+    userInput: "",
+    previousPassagesLength: 0,
+    errorCount: 0,
+    correctCount: 0,
     time: 0,
-  });
-  const [finished, setFinished] = useState(false);
+    mode: defaultMode,
+    difficulty: defaultDifficulty,
+  };
+}
+
+function getResetState(state, newPassage) {
+  return {
+    ...state,
+    status: "idle",
+    passage: newPassage,
+    userInput: "",
+    previousPassagesLength: 0,
+    errorCount: 0,
+    correctCount: 0,
+    time: 0,
+  };
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.RESET_TEST:
+      return getResetState(state, action.payload);
+    case ACTIONS.DIFFICULTY_CHANGED:
+      return getResetState(
+        { ...state, difficulty: action.payload.difficulty },
+        action.payload.passage,
+      );
+    case ACTIONS.MODE_CHANGED:
+      return getResetState(
+        { ...state, mode: action.payload.mode },
+        action.payload.passage,
+      );
+    case ACTIONS.USER_TYPED: {
+      const newUserInput = action.payload;
+      const isNewCharacter = newUserInput.length > state.userInput.length;
+      const isError =
+        isNewCharacter &&
+        newUserInput[newUserInput.length - 1] !==
+          state.passage[newUserInput.length - 1];
+
+      return {
+        ...state,
+        userInput: action.payload,
+        errorCount: isError ? state.errorCount + 1 : state.errorCount,
+        correctCount:
+          !isError && isNewCharacter
+            ? state.correctCount + 1
+            : state.correctCount,
+        status: state.status === "idle" ? "active" : state.status,
+      };
+    }
+    case ACTIONS.TEST_FINISHED:
+      return { ...state, status: "finished" };
+    case ACTIONS.TIMED_PASSAGE_COMPLETED:
+      return {
+        ...state,
+        passage: action.payload,
+        userInput: "",
+        previousPassagesLength:
+          state.previousPassagesLength + state.passage.length,
+      };
+    case ACTIONS.TIMER_TICKED:
+      return { ...state, time: state.time + 1 };
+    case ACTIONS.START_TEST:
+      return { ...state, status: "active" };
+    default:
+      return state;
+  }
+}
+
+export function useTypingSpeedTest() {
   const modeSettings = settingsList.find((setting) => setting.id === "mode");
   const defaultMode = modeSettings?.options[modeSettings.default];
-  const [mode, setMode] = useState(defaultMode);
   const difficultySettings = settingsList.find(
     (setting) => setting.id === "difficulty",
   );
   const defaultDifficulty =
     difficultySettings?.options[difficultySettings.default];
-  const [difficulty, setDifficulty] = useState(defaultDifficulty);
 
-  // EVENT HANDLERS
-  function handleUserInputChange(event) {
-    const newInputValue = event.target.value;
+  const [state, dispatch] = useReducer(
+    reducer,
+    getInitialState(defaultMode, defaultDifficulty),
+  );
 
-    setUserInput(newInputValue);
-    processUserInput(newInputValue);
+  const accuracy = useMemo(() => {
+    return state.correctCount === 0 && state.errorCount === 0
+      ? 100
+      : (state.correctCount / (state.correctCount + state.errorCount)) * 100;
+  }, [state.correctCount, state.errorCount]);
 
-    if (newInputValue.length >= passage.length) {
-      if (mode.type === "passage") {
-        setFinished(true);
-        setTestStarted(false);
-      } else if (mode.type === "timed") {
-        getNewPassage();
-        setUserInput("");
-        setPreviousPassagesLength((prev) => prev + passage.length);
-      }
-    }
+  const wpm = useMemo(() => {
+    return state.time === 0
+      ? 0
+      : Math.floor(
+          ((state.previousPassagesLength + state.userInput.length) / 5) *
+            (60 / state.time) *
+            (accuracy / 100),
+        );
+  }, [state.time, state.userInput, state.previousPassagesLength, accuracy]);
 
-    if (!testStarted) {
-      setTestStarted(true);
-    }
-  }
-
-  useEffect(() => {
-    console.log({
-      passage,
-      testStarted,
-      previousPassagesLength,
-      errorCount,
-      correctCount,
-      ...stats,
-      finished,
-      mode,
-      difficulty,
-    });
-  }, [userInput]);
-
-  // EFFECTS
-  useEffect(() => {
-    setPassageCharArray(createPassageCharArray(passage));
-  }, [passage]);
-
-  // get new passage when difficulty changes
-  useEffect(() => {
-    getNewPassage();
-  }, [difficulty]);
-
-  // reset test when passage changes
-  useEffect(() => {
-    if (mode.type === "passage") {
-      resetTest();
-      setTestStarted(false);
-    } else if (mode.type === "timed" && !testStarted) {
-      resetTest();
-    }
-  }, [passage]);
-
-  // stats calculator
-  useEffect(() => {
-    const accuracy =
-      correctCount === 0 && errorCount === 0
-        ? 100
-        : (correctCount / (correctCount + errorCount)) * 100;
-
-    const wpm =
-      stats.time === 0
-        ? 0
-        : Math.floor(
-            ((previousPassagesLength + userInput.length) / 5) *
-              (60 / stats.time) *
-              (accuracy / 100),
-          );
-
-    setStats((prev) => ({
-      ...prev,
-      wpm,
-      accuracy,
+  const passageCharArray = useMemo(() => {
+    return state.passage.split("").map((char, index) => ({
+      char,
+      index,
+      isCorrect:
+        index < state.userInput.length ? state.userInput[index] === char : null,
     }));
-  }, [stats.time, passageCharArray, errorCount]);
+  }, [state.passage, state.userInput]);
 
-  // timer
+  const timeRef = useRef(state.time);
+
   useEffect(() => {
-    if (!testStarted || finished) return;
+    timeRef.current = state.time;
+  }, [state.time]);
+
+  useEffect(() => {
+    if (state.status !== "active") return;
 
     const intervalId = setInterval(() => {
-      setStats((prev) => ({
-        ...prev,
-        time: prev.time + 1,
-      }));
+      const nextTime = timeRef.current + 1;
+      dispatch({ type: ACTIONS.TIMER_TICKED });
+      if (nextTime >= state.mode.startTime) {
+        dispatch({ type: ACTIONS.TEST_FINISHED });
+      }
     }, 1_000);
 
     return () => clearInterval(intervalId);
-  }, [testStarted, finished]);
+  }, [state.status]);
 
-  // stops test for timed mode
-  useEffect(() => {
-    if (stats.time >= mode.startTime) {
-      setFinished(true);
-      setTestStarted(false);
+  function handleDifficultyChange(difficulty) {
+    dispatch({
+      type: ACTIONS.DIFFICULTY_CHANGED,
+      payload: { difficulty, passage: getRandomPassage(difficulty).text },
+    });
+  }
+
+  function handleModeChange(mode) {
+    dispatch({
+      type: ACTIONS.MODE_CHANGED,
+      payload: { mode, passage: getRandomPassage(state.difficulty).text },
+    });
+  }
+
+  function handleUserInputChange(event) {
+    const userInput = event.target.value;
+
+    dispatch({
+      type: ACTIONS.USER_TYPED,
+      payload: userInput,
+    });
+    if (userInput.length >= state.passage.length) {
+      if (state.mode.type === "timed") {
+        dispatch({
+          type: ACTIONS.TIMED_PASSAGE_COMPLETED,
+          payload: getRandomPassage(state.difficulty).text,
+        });
+      } else if (state.mode.type === "passage") {
+        dispatch({ type: ACTIONS.TEST_FINISHED });
+      }
     }
-  }, [stats.time]);
+  }
+
+  function handleReset() {
+    dispatch({
+      type: ACTIONS.RESET_TEST,
+      payload: getRandomPassage(state.difficulty).text,
+    });
+  }
+
+  function handleStart() {
+    dispatch({
+      type: ACTIONS.START_TEST,
+    });
+  }
 
   return {
-    getNewPassage,
-    testStarted,
-    setTestStarted,
-    userInput,
+    status: state.status,
+    userInput: state.userInput,
+    mode: state.mode,
     passageCharArray,
+    wpm,
+    accuracy,
+    time: state.time,
+    handleDifficultyChange,
+    handleModeChange,
     handleUserInputChange,
-    stats,
-    setPassage,
-    finished,
-    setFinished,
-    resetTest,
-    mode,
-    setMode,
-    difficulty,
-    setDifficulty,
+    handleReset,
+    handleStart,
   };
 }

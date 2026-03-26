@@ -4,46 +4,38 @@ import TextBox from "./TextBox";
 import Results from "./Results";
 
 export default function MainContent({
-  getNewPassage,
-  testStarted,
-  setTestStarted,
+  status,
   userInput,
-  passageCharArray,
-  handleUserInputChange,
-  stats,
-  setPassage,
-  finished,
-  setFinished,
-  resetTest,
   mode,
-  setMode,
-  difficulty,
-  setDifficulty,
+  passageCharArray,
+  wpm,
+  accuracy,
+  time,
+  onDifficultyChange,
+  onModeChange,
+  onUserInputChange,
+  onReset,
+  onStart,
 }) {
   return (
     <div className="grid gap-8">
       <div className="pb-200 border-b-1 border-neutral-700 gap-250 flex flex-col xl:flex-row xl:items-center justify-between">
-        <StatsRow stats={stats} mode={mode} />
-        <SettingsRow setDifficulty={setDifficulty} setMode={setMode} />
+        <StatsRow stats={{ wpm, accuracy, time }} mode={mode} />
+        <SettingsRow
+          onDifficultyChange={onDifficultyChange}
+          onModeChange={onModeChange}
+        />
       </div>
-      {!finished && (
+      {status !== "finished" && (
         <TextBox
-          testStarted={testStarted}
-          setTestStarted={setTestStarted}
+          status={status}
           userInput={userInput}
           passageCharArray={passageCharArray}
-          handleUserInputChange={handleUserInputChange}
-          setPassage={setPassage}
-          difficulty={difficulty}
+          onUserInputChange={onUserInputChange}
+          onStart={onStart}
         />
       )}
-      {finished && (
-        <Results
-          resetTest={resetTest}
-          getNewPassage={getNewPassage}
-          setFinished={setFinished}
-        />
-      )}
+      {status === "finished" && <Results onReset={onReset} />}
     </div>
   );
 }

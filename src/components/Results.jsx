@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./ui/Button.jsx";
 
-export default function Results({ resetTest, getNewPassage, setFinished }) {
+export default function Results({ onReset }) {
   return (
     <div className="flex flex-col pt-300 gap-400">
       <di className="flex flex-col items-center pt-300 gap-125">
@@ -19,9 +19,7 @@ export default function Results({ resetTest, getNewPassage, setFinished }) {
         <Button
           variant="secondary"
           onClick={() => {
-            resetTest();
-            getNewPassage();
-            setFinished(false);
+            onReset();
           }}
         >
           Go Again
