@@ -12,6 +12,7 @@ const ACTIONS = {
   TIMED_PASSAGE_COMPLETED: "timed_passage_completed",
   TIMER_TICKED: "timer_ticked",
   START_TEST: "start_test",
+  HIGH_SCORE_UPDATED: "high_score_updated",
 };
 
 function getInitialState(defaultMode, defaultDifficulty) {
@@ -25,6 +26,7 @@ function getInitialState(defaultMode, defaultDifficulty) {
     time: 0,
     mode: defaultMode,
     difficulty: defaultDifficulty,
+    highScore: +localStorage.getItem("highScore") || null,
   };
 }
 
@@ -90,6 +92,11 @@ function reducer(state, action) {
       return { ...state, time: state.time + 1 };
     case ACTIONS.START_TEST:
       return { ...state, status: "active" };
+    case ACTIONS.HIGH_SCORE_UPDATED:
+      return {
+        ...state,
+        highScore: action.payload,
+      };
     default:
       return state;
   }
@@ -154,6 +161,18 @@ export function useTypingSpeedTest() {
     return () => clearInterval(intervalId);
   }, [state.status]);
 
+  useEffect(() => {
+    if (state.status !== "finished") return;
+
+    if (wpm > state.highScore) {
+      localStorage.setItem("highScore", wpm.toString());
+      dispatch({
+        type: ACTIONS.HIGH_SCORE_UPDATED,
+        payload: wpm,
+      });
+    }
+  }, [state.status]);
+
   function handleDifficultyChange(difficulty) {
     dispatch({
       type: ACTIONS.DIFFICULTY_CHANGED,
@@ -215,6 +234,7 @@ export function useTypingSpeedTest() {
     wpm,
     accuracy,
     time: state.time,
+    highScore: state.highScore,
     handleDifficultyChange,
     handleModeChange,
     handleUserInputChange,

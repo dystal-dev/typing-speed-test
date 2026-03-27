@@ -1,5 +1,5 @@
 import Result from "./ui/Result.jsx";
-import { resultsList } from "../data/results.js";
+import { resultStats } from "../data/results.js";
 import Button from "./ui/Button.jsx";
 import IconCompleted from "../assets/images/icon-completed.svg";
 import IconRestart from "../assets/images/icon-restart.svg";
@@ -44,7 +44,7 @@ export default function Results({
         </h2>
       </div>
       <div className="flex flex-row justify-center pt-250 pb-400 gap-250">
-        {resultsList.map((result) => (
+        {resultStats.map((result) => (
           <Result
             key={result.id}
             label={result.label}

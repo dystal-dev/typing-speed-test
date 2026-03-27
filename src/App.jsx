@@ -16,6 +16,7 @@ function App() {
     wpm,
     accuracy,
     time,
+    highScore,
     handleDifficultyChange,
     handleModeChange,
     handleUserInputChange,
@@ -26,7 +27,7 @@ function App() {
 
   return (
     <div className="grid font-sora px-400 pt-400 pb-800 gap-800 lg:px-1400 lg:py-400 lg:gap-800 max-w-(--app-max-width) mx-auto">
-      <Header />
+      <Header highScore={highScore} />
       <MainContent
         status={status}
         userInput={userInput}
@@ -38,6 +39,7 @@ function App() {
         wpm={wpm}
         accuracy={accuracy}
         time={time}
+        highScore={highScore}
         onDifficultyChange={handleDifficultyChange}
         onModeChange={handleModeChange}
         onUserInputChange={handleUserInputChange}
