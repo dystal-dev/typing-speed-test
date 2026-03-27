@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useRef, useMemo } from "react";
 import { settingsList } from "../data/settings";
+import { resultVariants } from "../data/results.js";
 import getRandomPassage from "../utils/passages.js";
 
 const ACTIONS = {
@@ -12,7 +13,7 @@ const ACTIONS = {
   TIMED_PASSAGE_COMPLETED: "timed_passage_completed",
   TIMER_TICKED: "timer_ticked",
   START_TEST: "start_test",
-  HIGH_SCORE_UPDATED: "high_score_updated",
+  TEST_RESULTS_EVALUATED: "test_results_evaluated",
 };
 
 function getInitialState(defaultMode, defaultDifficulty) {
@@ -27,6 +28,7 @@ function getInitialState(defaultMode, defaultDifficulty) {
     mode: defaultMode,
     difficulty: defaultDifficulty,
     highScore: +localStorage.getItem("highScore") || null,
+    resultVariant: null,
   };
 }
 
@@ -92,10 +94,11 @@ function reducer(state, action) {
       return { ...state, time: state.time + 1 };
     case ACTIONS.START_TEST:
       return { ...state, status: "active" };
-    case ACTIONS.HIGH_SCORE_UPDATED:
+    case ACTIONS.TEST_RESULTS_EVALUATED:
       return {
         ...state,
-        highScore: action.payload,
+        resultVariant: action.payload.variant,
+        highScore: action.payload.newHighScore,
       };
     default:
       return state;
@@ -164,13 +167,23 @@ export function useTypingSpeedTest() {
   useEffect(() => {
     if (state.status !== "finished") return;
 
-    if (wpm > state.highScore) {
+    let variant;
+    if (state.highScore === null) {
+      variant = resultVariants.baseline;
+    } else if (wpm > state.highScore) {
+      variant = resultVariants.highScore;
       localStorage.setItem("highScore", wpm.toString());
-      dispatch({
-        type: ACTIONS.HIGH_SCORE_UPDATED,
-        payload: wpm,
-      });
+    } else {
+      variant = resultVariants.default;
     }
+
+    dispatch({
+      type: ACTIONS.TEST_RESULTS_EVALUATED,
+      payload: {
+        variant,
+        newHighScore: wpm > state.highScore ? wpm : state.highScore,
+      },
+    });
   }, [state.status]);
 
   function handleDifficultyChange(difficulty) {
@@ -235,6 +248,7 @@ export function useTypingSpeedTest() {
     accuracy,
     time: state.time,
     highScore: state.highScore,
+    resultVariant: state.resultVariant,
     handleDifficultyChange,
     handleModeChange,
     handleUserInputChange,

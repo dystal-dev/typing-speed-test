@@ -14,6 +14,7 @@ export default function MainContent({
   wpm,
   accuracy,
   time,
+  resultVariant,
   onDifficultyChange,
   onModeChange,
   onUserInputChange,
@@ -49,6 +50,7 @@ export default function MainContent({
           accuracy={accuracy}
           errorCount={errorCount}
           correctCount={correctCount}
+          resultVariant={resultVariant}
         />
       )}
     </div>

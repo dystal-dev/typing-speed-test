@@ -1,7 +1,6 @@
 import Result from "./ui/Result.jsx";
 import { resultStats } from "../data/results.js";
 import Button from "./ui/Button.jsx";
-import IconCompleted from "../assets/images/icon-completed.svg";
 import IconRestart from "../assets/images/icon-restart.svg";
 import formatAccuracy from "../utils/formatAccuracy.js";
 
@@ -11,7 +10,10 @@ export default function Results({
   accuracy,
   errorCount,
   correctCount,
+  resultVariant,
 }) {
+  if (!resultVariant) return null;
+
   function getResultValue(id) {
     if (id === "wpm") return wpm;
     if (id === "accuracy")
@@ -33,14 +35,14 @@ export default function Results({
   return (
     <div className="flex flex-col pt-300 gap-400 items-center">
       <img
-        src={IconCompleted}
-        className="h-800 w-800 rounded-full shadow-green-glow"
-        alt="icon-completed"
+        src={resultVariant.icon}
+        className={resultVariant.iconClass}
+        alt={resultVariant.title}
       />
       <div className="flex flex-col items-center pt-300 gap-125">
-        <h1 className="text-preset-1">Test Complete!</h1>
+        <h1 className="text-preset-1">{resultVariant.title}</h1>
         <h2 className="text-preset-3 text-neutral-400">
-          Solid run. Keep pushing to beat your high score.
+          {resultVariant.subtitle}
         </h2>
       </div>
       <div className="flex flex-row justify-center pt-250 pb-400 gap-250">
@@ -54,7 +56,7 @@ export default function Results({
       </div>
       <div className="flex justify-center">
         <Button variant="secondary" onClick={onReset}>
-          Go Again
+          {resultVariant.buttonLabel}
           <img src={IconRestart} className="invert" alt="restart" />
         </Button>
       </div>

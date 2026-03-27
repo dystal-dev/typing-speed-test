@@ -17,6 +17,7 @@ function App() {
     accuracy,
     time,
     highScore,
+    resultVariant,
     handleDifficultyChange,
     handleModeChange,
     handleUserInputChange,
@@ -39,7 +40,7 @@ function App() {
         wpm={wpm}
         accuracy={accuracy}
         time={time}
-        highScore={highScore}
+        resultVariant={resultVariant}
         onDifficultyChange={handleDifficultyChange}
         onModeChange={handleModeChange}
         onUserInputChange={handleUserInputChange}
