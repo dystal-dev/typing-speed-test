@@ -1,10 +1,11 @@
 # Typing Speed Test 
 
-# Preview
-
 ![](./preview.gif)
 
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+<div align="center">
+  <h3><a href="https://typing-speed-test-woad.vercel.app/">Live Site URL</a></h3>
+</div>
+
 
 # Features
 
