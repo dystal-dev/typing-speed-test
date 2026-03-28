@@ -3,7 +3,7 @@
 ![](./preview.gif)
 
 <div align="center">
-  <h3><a href="https://typing-speed-test-woad.vercel.app/">Live Site URL</a></h3>
+  <h3><a href="https://typing-speed-test-woad.vercel.app/" target="_blank" rel="noopener noreferrer">Live Site URL</a></h3>
 </div>
 
 
