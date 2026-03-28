@@ -33,19 +33,21 @@ export default function Results({
   }
 
   return (
-    <div className="flex flex-col pt-300 gap-400 items-center">
+    <div className="flex flex-col pt-300 gap-300 sm:gap-400 items-center">
       <img
         src={resultVariant.icon}
         className={resultVariant.iconClass}
         alt={resultVariant.title}
       />
-      <div className="flex flex-col items-center pt-300 gap-125">
-        <h1 className="text-preset-1">{resultVariant.title}</h1>
-        <h2 className="text-preset-3 text-neutral-400">
+      <div className="flex flex-col items-center pt-200 sm:pt-300 gap-125">
+        <h1 className="text-preset-1-mobile sm:text-preset-1 text-center">
+          {resultVariant.title}
+        </h1>
+        <h2 className="text-preset-5 sm:text-preset-3 text-neutral-400 text-center">
           {resultVariant.subtitle}
         </h2>
       </div>
-      <div className="flex flex-row justify-center pt-250 pb-400 gap-250">
+      <div className="flex flex-col w-full sm:w-fit sm:flex-row justify-center sm:pt-250 pb-200 sm:pb-400 gap-250">
         {resultStats.map((result) => (
           <Result
             key={result.id}

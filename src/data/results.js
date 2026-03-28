@@ -13,7 +13,8 @@ export const resultVariants = {
     subtitle: "Solid run. Keep pushing to beat your high score.",
     buttonLabel: "Go Again",
     icon: IconCompleted,
-    iconClass: "h-800 w-800 rounded-full shadow-green-glow",
+    iconClass:
+      "h-800 w-800 rounded-full shadow-green-glow-small sm:shadow-green-glow",
   },
   highScore: {
     title: "High Score Smashed!",
@@ -28,6 +29,7 @@ export const resultVariants = {
       "You’ve set the bar. Now the real challenge begins—time to beat it.",
     buttonLabel: "Beat This Score",
     icon: IconCompleted,
-    iconClass: "h-800 w-800 rounded-full shadow-green-glow",
+    iconClass:
+      "h-800 w-800 rounded-full shadow-green-glow-small sm:shadow-green-glow",
   },
 };

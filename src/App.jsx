@@ -27,7 +27,7 @@ function App() {
   } = useTypingSpeedTest();
 
   return (
-    <div className="grid font-sora px-400 pt-400 pb-800 gap-800 lg:px-1400 lg:py-400 lg:gap-800 max-w-(--app-max-width) mx-auto">
+    <div className="grid font-sora px-200 pt-200 pb-400 gap-400 sm:px-400 sm:pt-400 sm:pb-800 sm:gap-500 lg:px-1400 lg:py-400 lg:gap-800 max-w-(--app-max-width) mx-auto">
       <Header highScore={highScore} />
       <MainContent
         status={status}

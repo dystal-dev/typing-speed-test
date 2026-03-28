@@ -1,4 +1,5 @@
-import Setting from "./ui/Setting";
+import SettingButtons from "./ui/SettingButtons";
+import SettingDropdown from "./ui/SettingDropdown";
 import { settingsList } from "../data/settings";
 
 export default function SettingsRow({
@@ -22,9 +23,20 @@ export default function SettingsRow({
 
   return (
     <>
-      <div className="flex divide-x divide-neutral-700">
+      <div className="hidden sm:flex divide-x divide-neutral-700">
         {settingsList.map((setting) => (
-          <Setting
+          <SettingButtons
+            key={setting.id}
+            label={setting.id}
+            options={setting.options}
+            activeId={setting.id === "mode" ? mode.id : difficulty.id}
+            onChange={handlers[setting.id]}
+          />
+        ))}
+      </div>
+      <div className="flex sm:hidden gap-125">
+        {settingsList.map((setting) => (
+          <SettingDropdown
             key={setting.id}
             label={setting.id}
             options={setting.options}

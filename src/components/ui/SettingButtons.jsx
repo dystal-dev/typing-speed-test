@@ -1,7 +1,6 @@
 import Button from "./Button.jsx";
-import { useState } from "react";
 
-export default function Settings({ label, options, activeId, onChange }) {
+export default function SettingButtons({ label, options, activeId, onChange }) {
   return (
     <ul
       key={label}
